@@ -1,0 +1,407 @@
+|           CITY            |
+|---------------------------|
+| Field         | Type      |
+|---------------------------|
+|ID           | NUMBER      |
+|NAME         | VARCHAR2(17)|
+|COUNTRYCODE  | VARCHAR2(3) |
+|DISTRICT     | VARCHAR2(20)|
+|POPULATION   | NUMBER      |
+|---------------------------|
+
+#1. Query all columns for all American cities in the CITY table with populations larger than 100000. The CountryCode for America is USA.
+
+Answer: 
+SELECT *
+FROM city
+WHERE CountryCode = 'USA' AND population > 100000;
+
+Output:
+3878 Scottsdale USA Arizona 202705 
+3965 Corona USA California 124966 
+3973 Concord USA California 121780 
+3977 Cedar Rapids USA Iowa 120758 
+3982 Coral Springs USA Florida 117549 
+
+
+
+#2. Query the NAME field for all American cities in the CITY table with populations larger than 120000. The CountryCode for America is USA.
+
+Answer:
+SELECT name
+FROM city
+WHERE countrycode = 'USA' and population > 120000;
+
+Output:
+Scottsdale
+Corona
+Concord
+Cedar Rapids
+
+
+
+#3. Query all columns (attributes) for every row in the CITY table.
+The CITY table is described above
+
+Answer:
+SELECT *
+FROM city;
+
+Output:
+6 Rotterdam NLD Zuid-Holland 593321 
+3878 Scottsdale USA Arizona 202705 
+3965 Corona USA California 124966 
+3973 Concord USA California 121780 
+3977 Cedar Rapids USA Iowa 120758 
+3982 Coral Springs USA Florida 117549 
+4054 Fairfield USA California 92256 
+4058 Boulder USA Colorado 91238 
+4061 Fall River USA Massachusetts 90555 
+
+
+
+#4. Query all columns for a city in CITY with the ID 1661.
+
+Answer: 
+SELECT *
+FROM city
+WHERE ID = 1661;
+
+Output:
+1661 Sayama JPN Saitama 162472
+
+
+
+#5. Query all attributes of every Japanese city in the CITY table. The COUNTRYCODE for Japan is JPN.
+
+Answer:
+SELECT *
+FROM city
+WHERE countrycode = 'JPN';
+
+Output:
+1613 Neyagawa JPN Osaka 257315 
+1630 Ageo JPN Saitama 209442 
+1661 Sayama JPN Saitama 162472 
+1681 Omuta JPN Fukuoka 142889 
+1739 Tokuyama JPN Yamaguchi 107078 
+
+
+
+#6. Query the names of all the Japanese cities in the CITY table. The COUNTRYCODE for Japan is JPN.
+
+Answer:
+SELECT name
+FROM city
+WHERE countrycode = 'JPN';
+
+Output:
+Neyagawa 
+Ageo 
+Sayama 
+Omuta 
+Tokuyama 
+
+
+
+|           STATION         |
+|---------------------------|
+| Field       | Type        |
+|---------------------------|
+|ID           | NUMBER      |
+|CITY         | VARCHAR2(21)|
+|STATE        | VARCHAR2(2) |
+|LAT_N        | NUMBER      |
+|LONG_W       | NUMBER      |
+|---------------------------|
+where LAT_N is the northern latitude and LONG_W is the western longitude.
+
+#7. Query a list of CITY and STATE from the STATION table.
+
+Answer:
+SELECT city, state
+FROM station;
+
+Output (shortened):
+Acme LA 
+Addison MI 
+Agency MO 
+Aguanga CA 
+Alanson MI 
+Alba MI 
+Albany CA 
+Albion IN 
+Algonac MI 
+Aliso Viejo CA 
+
+
+
+#8. Query a list of CITY names from STATION for cities that have an even ID number. Print the results in any order, but exclude duplicates from the answer.
+
+Answer:
+SELECT DISTINCT city
+FROM station
+WHERE ID % 2 = 0;
+
+Output (shortened):
+Aguanga 
+Alba 
+Albany 
+Amo 
+Andersonville 
+Archie 
+Athens 
+Atlantic Mine 
+Bainbridge 
+
+
+
+#9. Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table.
+For example, if there are three records in the table with CITY values 'New York', 'New York', 'Bengalaru', there are 2 different city names: 'New York' and 'Bengalaru'. The query returns 1, because total number of records - number of unique city names = 3 - 2 = 1.
+
+Answer:
+SELECT (COUNT(city) - COUNT(DISTINCT city))
+FROM station;
+
+Output:
+13
+
+
+
+#10. Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically.
+
+Sample Input: For example, CITY has four entries: DEF, ABC, PQRS and WXY.
+Sample Output:
+ABC 3
+PQRS 4
+Explanation:
+When ordered alphabetically, the CITY names are listed as ABC, DEF, PQRS, and WXY, with lengths 3, 3, 4, and 3. The longest name is PQRS, but there are 3 options for shortest named city. Choose ABC, because it comes first alphabetically.
+Note: You can write two separate queries to get the desired output. It need not be a single query.
+
+Answer:
+select CITY, LENGTH(CITY) 
+from STATION 
+order by Length(CITY) asc, CITY 
+limit 1; 
+
+select CITY, LENGTH(CITY) 
+from STATION 
+order by Length(CITY) desc, CITY 
+limit 1; 
+
+Output:
+Amo 3
+Marine On Saint Croix 21
+
+
+
+#11. Query the list of CITY names starting with vowels (i.e., a, e, i, o, or u) from STATION. Your result cannot contain duplicates.
+
+Answers: 
+SELECT DISTINCT city
+FROM station
+WHERE city LIKE 'a%' or city LIKE 'e%' or city LIKE 'i%' or city LIKE 'o%' or city LIKE 'u%';
+
+SELECT city 
+FROM station 
+WHERE SUBSTR(CITY,1,1) IN ('A','E','I','O','U');
+
+Output (shortened):
+Acme 
+Addison 
+Agency 
+Athens 
+East China  
+Edgewater 
+Irvington 
+Oakfield  
+Odin 
+Udall  
+Urbana
+
+
+
+#12. Query the list of CITY names ending with vowels (a, e, i, o, u) from STATION. Your result cannot contain duplicates.
+
+Answers:
+SELECT DISTINCT city 
+FROM station 
+WHERE city  LIKE '%A' 
+or  city  LIKE '%E' 
+or city  LIKE '%I' 
+or city  LIKE '%O' 
+or city  LIKE '%U';
+
+SELECT DISTINCT CITY 
+FROM STATION 
+WHERE SUBSTRING(city, -1) IN ("a", "e", "i", "o", "u");
+
+Output (shortened): 
+Acme 
+Baileyville 
+Cahone 
+Daleville 
+East China 
+Fort Meade 
+Glencoe 
+Honolulu 
+Jerome 
+Kanorado 
+Lakeville 
+Middleboro 
+Netawaka 
+Ojai 
+Palatka 
+Ravenna 
+Saint Elmo 
+Tarzana 
+Urbana 
+Verona 
+Woodsboro  
+Yuma 
+Zionsville
+
+
+
+#13. Query the list of CITY names from STATION which have vowels (i.e., a, e, i, o, and u) as both their first and last characters. Your result cannot contain duplicates.
+
+Answers:
+SELECT DISTINCT CITY 
+FROM STATION 
+WHERE (CITY LIKE 'A%' OR CITY LIKE 'E%' OR CITY LIKE 'I%' OR CITY LIKE 'O%' OR CITY LIKE 'U%') 
+    AND (CITY LIKE '%a' OR CITY LIKE '%e' OR CITY LIKE '%i' OR CITY LIKE '%o' OR CITY LIKE '%u') 
+order by city;   
+
+ select city
+    from station where SUBSTRING(city,1,1) in ('A','E','I','O','U') and 
+    SUBSTRING(city,-1,1) in ('A','E','I','O','U');
+
+SELECT distinct CITY 
+FROM STATION 
+where (CITY LIKE 'a%' 
+    OR CITY LIKE 'e%' 
+    OR CITY LIKE 'i%' 
+    OR CITY LIKE 'o%'
+    OR CITY LIKE 'u%'
+) AND (CITY LIKE '%a' 
+    OR CITY LIKE '%e'
+    OR CITY LIKE '%i'
+    OR CITY LIKE '%o'
+    OR CITY LIKE '%u'
+)
+
+Output shortened:
+Acme 
+Aliso Viejo 
+Alpine  
+Amo 
+Arkadelphia 
+Eastlake 
+Eufaula 
+Oconee 
+Ojai  
+Oshtemo 
+Ozona 
+Upperco 
+Urbana
+
+
+
+#14. Query the list of CITY names from STATION that do not start with vowels. Your result cannot contain duplicates.
+
+Answer: 
+SELECT distinct CITY 
+FROM STATION 
+where (CITY NOT LIKE 'a%' 
+    AND CITY NOT LIKE 'e%' 
+    AND CITY NOT LIKE 'i%' 
+    AND CITY NOT LIKE 'o%'
+    AND CITY NOT LIKE 'u%');
+
+Output shortened:
+Baton Rouge  
+Columbus 
+Delta 
+Freeport 
+Fremont  
+Gales Ferry 
+Garden City 
+Honolulu
+Hyde Park 
+Jordan 
+Julian 
+Kanorado 
+Kell
+Lakeville 
+Little Rock 
+Magnolia 
+Montgomery City 
+Montreal 
+Norway 
+Norwood 
+Prairie Du Rocher 
+Prescott 
+Quinter 
+Richmond  
+Rio Oso 
+Southport 
+Sturgis 
+Tennessee 
+Tyler  
+Verona 
+Vulcan 
+Woodsboro 
+Woodstock Valley 
+Yoder 
+Yuma 
+Zachary 
+Zionsville 
+
+
+
+#15. Query the list of CITY names from STATION that do not end with vowels. Your result cannot contain duplicates.
+
+Answer: 
+SELECT distinct CITY 
+FROM STATION 
+where (CITY NOT LIKE '%a' 
+    AND CITY NOT LIKE '%e' 
+    AND CITY NOT LIKE '%i' 
+    AND CITY NOT LIKE '%o'
+    AND CITY NOT LIKE '%u');
+
+Output:
+Addison 
+Arlington 
+Athens 
+Blue River 
+Cher
+Columbus 
+Compton 
+Del Mar 
+Eros 
+Esmond 
+Freeport 
+Fremont 
+Griffin 
+Grimes 
+Hazlehurst 
+Jordan 
+Julian 
+Kissee Mills 
+Ludlow 
+Montreal 
+Newbury 
+Oakfield 
+Odin 
+Pocahontas 
+Quinter 
+Randall 
+Shreveport 
+Sturgis 
+Taft 
+Tyler 
+Woodbury 
+Woodstock Valley  
+Yoder 
+Zachary
